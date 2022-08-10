@@ -3,7 +3,9 @@
 - hosts: all
   become: true
   pre_tasks:
+
   - name: install updates (Ubuntu)
+    tags: always
     apt:
       upgrade: dist
       update_cache: yes
@@ -14,6 +16,7 @@
   tasks:
 
   - name: update repo index, install apache and php package
+    tags: apache,apache2,ubuntu
     apt:
       name:
         - apache2
@@ -26,6 +29,7 @@
   tasks:
 
   - name: install mariadb package
+    tags: db,mariadb,ubuntu
     apt:
       name:
         - mariadb-server
@@ -37,6 +41,7 @@
   tasks:
 
   - name: install samba package
+    tags: samba
     apt:
       name:
         - samba
