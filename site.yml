@@ -7,10 +7,20 @@
   - name: install updates (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
-
+  
+- hosts: all
+  become: true
+  tasks:
+  
+    - name: add ssh key for simone
+      tags: always
+      authorized_key:
+        user: simone
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGQIdm9eOwMsNe5A3gpUTIcdAXJm8KYTCbNrYOAIPNCf ansible"
+    
 - hosts: workstations
   become: true
   tasks:
@@ -39,6 +49,14 @@
         - libapache2-mod-php
       state: latest
     when: ansible_distribution == "Ubuntu"
+
+  - name: restart apache2 service (Ubuntu)
+    tags: apache,apache2,ubuntu 
+    service: 
+      name: apache2
+      state: restarted
+      enabled: yes
+    when: ansible_distribution == "Ubuntu" 
 
   - name: copy default html file for site
     tags: html,apache,apache2,ubuntu
