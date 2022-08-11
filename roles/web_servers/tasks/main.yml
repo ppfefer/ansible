@@ -1,0 +1,25 @@
+- name: update repo index, install apache and php package
+  tags: apache,apache2,ubuntu
+  apt:
+    name:
+    - apache2
+    - libapache2-mod-php
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: restart apache2 service (Ubuntu)
+  tags: apache,apache2,ubuntu 
+  service: 
+    name: apache2
+    state: restarted
+    enabled: yes
+  when: ansible_distribution == "Ubuntu" 
+
+- name: copy default html file for site
+  tags: html,apache,apache2,ubuntu
+  copy:
+    src: default_site.html 
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
